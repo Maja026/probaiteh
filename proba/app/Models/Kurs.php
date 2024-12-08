@@ -12,4 +12,8 @@ class Kurs extends Model
     public function profesor(){
         return $this->belongsTo(Profesor::class);
     }
+    public function korisnici(){
+        return $this->belongsToMany(Korisnik::class);
+    }
+    protected $table = 'kurs';
 }
