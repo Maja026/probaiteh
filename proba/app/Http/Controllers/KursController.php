@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Kurs;
 use Illuminate\Http\Request;
 
 class KursController extends Controller
@@ -11,7 +12,8 @@ class KursController extends Controller
      */
     public function index()
     {
-        //
+        $kursevi = Kurs::all();
+        return response()->json($kursevi);
     }
 
     /**
@@ -27,7 +29,14 @@ class KursController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'naziv' => 'required|string|max:255',
+            'opis' => 'required|string',
+            // Add other validations as needed
+        ]);
+    
+        $kurs = Kurs::create($request->all());
+        return response()->json($kurs, 201);
     }
 
     /**
@@ -35,7 +44,11 @@ class KursController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $kurs = Kurs::find($id);
+        if ($kurs) {
+            return response()->json($kurs);
+        }
+        return response()->json(['message' => 'Kurs not found'], 404);
     }
 
     /**
@@ -51,7 +64,12 @@ class KursController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $kurs = Kurs::find($id);
+        if ($kurs) {
+            $kurs->update($request->all());
+            return response()->json($kurs);
+        }
+        return response()->json(['message' => 'Kurs not found'], 404);
     }
 
     /**
@@ -59,6 +77,11 @@ class KursController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $kurs = Kurs::find($id);
+        if ($kurs) {
+            $kurs->delete();
+            return response()->json(['message' => 'Kurs deleted']);
+        }
+        return response()->json(['message' => 'Kurs not found'], 404);
     }
 }
