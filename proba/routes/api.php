@@ -6,15 +6,21 @@ use App\Http\Controllers\KursController;
 
 // Ruta za autentifikaciju korisnika
 Route::get('/korisnik', function (Request $request) {
-    return $request->user(); // I dalje koristi user() zbog Sanctum-a, ali naziv rute je "korisnik".
+    return response()->json($request->user());
 })->middleware('auth:sanctum');
 
-// Rute za kurseve
-Route::get('kursevi', [KursController::class, 'index']); // Javno dostupno
-Route::get('kursevi/{id}', [KursController::class, 'show']); // Javno dostupno
-
+// Rute za kurseve sa middlewarem
 Route::middleware('auth:sanctum')->group(function () {
-    Route::post('kursevi', [KursController::class, 'store']); // Samo autentifikovani korisnici
-    Route::put('kursevi/{id}', [KursController::class, 'update']); // Samo autentifikovani korisnici
-    Route::delete('kursevi/{id}', [KursController::class, 'destroy']); // Samo autentifikovani korisnici
+    Route::get('kursevi', [KursController::class, 'index'])->name('kursevi.index');
+    Route::get('kursevi/{id}', [KursController::class, 'show'])->name('kursevi.show');
+    Route::post('kursevi', [KursController::class, 'store'])->name('kursevi.store');
+    Route::put('kursevi/{id}', [KursController::class, 'update'])->name('kursevi.update');
+    Route::delete('kursevi/{id}', [KursController::class, 'destroy'])->name('kursevi.destroy');
+});
+
+// Handle errors in JSON format
+Route::fallback(function () {
+    return response()->json([
+        'error' => 'Not Found'
+    ], 404);
 });
