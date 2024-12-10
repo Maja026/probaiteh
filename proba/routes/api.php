@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\KursController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\SearchController;
 
 // Ruta za autentifikaciju korisnika
 Route::get('/korisnik', function (Request $request) {
@@ -19,6 +20,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('kursevi/{id}', [KursController::class, 'destroy'])->name('kursevi.destroy');
 });
 Route::post('/password/reset', [App\Http\Controllers\PasswordResetController::class, 'reset']);
+Route::get('/search', [SearchController::class, 'search']);
+
+
 
 // Registracija i prijava korisnika
 Route::post('register/korisnik', [AuthController::class, 'registerKorisnik']);
