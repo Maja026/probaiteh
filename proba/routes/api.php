@@ -18,6 +18,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('kursevi/{id}', [KursController::class, 'update'])->name('kursevi.update');
     Route::delete('kursevi/{id}', [KursController::class, 'destroy'])->name('kursevi.destroy');
 });
+Route::post('/password/reset', [App\Http\Controllers\PasswordResetController::class, 'reset']);
 
 // Registracija i prijava korisnika
 Route::post('register/korisnik', [AuthController::class, 'registerKorisnik']);
@@ -36,4 +37,3 @@ Route::fallback(function () {
         'error' => 'Not Found'
     ], 404);
 });
-
